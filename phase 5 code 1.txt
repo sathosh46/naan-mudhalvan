@@ -1,0 +1,61 @@
+#define trigPin 9
+#define echoPin 10
+#define motorLeft 3
+#define motorRight 5
+#define stopDistance 10  // Distance threshold in cm
+
+Servo arm;
+SoftwareSerial gps(2, 4);  // RX, TX
+
+void setup() {
+  Serial.begin(9600);
+  gps.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(motorLeft, OUTPUT);
+  pinMode(motorRight, OUTPUT);
+  arm.attach(6);
+  arm.write(0);  // Arm initial position
+}
+
+void loop() {
+  long duration, distance;
+
+  digitalWrite(trigPin, LOW); delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  if (distance < stopDistance) {
+    stopMotors();
+    pickWaste();
+  } else {
+    moveForward();
+  }
+
+  readGPS();
+}
+
+void moveForward() {
+  analogWrite(motorLeft, 150);
+  analogWrite(motorRight, 150);
+}
+
+void stopMotors() {
+  analogWrite(motorLeft, 0);
+  analogWrite(motorRight, 0);
+}
+
+void pickWaste() {
+  arm.write(90);  // Lower arm
+  delay(2000);
+  arm.write(0);   // Lift arm
+}
+
+void readGPS() {
+  while (gps.available()) {
+    Serial.write(gps.read());
+  }
+}

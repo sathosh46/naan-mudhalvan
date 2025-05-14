@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Waste Collection Dashboard</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; text-align: center; }
+    h1 { color: green; }
+    .status { padding: 20px; background: white; margin: 20px auto; width: 50%; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Smart Clean Waste Collection</h1>
+  <div class="status">
+    <h2>Bin Status: <span id="binStatus">Fetching...</span></h2>
+    <h2>Robot Location: <span id="location">Fetching...</span></h2>
+  </div>
+  <script>
+    // Simulated data update
+    setInterval(() => {
+      document.getElementById("binStatus").innerText = Math.random() > 0.5 ? "Full" : "Empty";
+      document.getElementById("location").innerText = "Lat: 13.0827, Long: 80.2707";
+    }, 2000);
+  </script>
+</body>
+</html>
